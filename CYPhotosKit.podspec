@@ -3,7 +3,7 @@
 
 Pod::Spec.new do |s|
 s.name         = "CYPhotosKit"
-s.version      = "1.0"
+s.version      = "1.2"
 s.summary      = "一款不错的相册照片选择器"
 s.homepage     = "https://github.com/ZhaoBingDong/CYPhotosLibrary"
 s.license = { :type => 'MIT', :text => <<-LICENSE
