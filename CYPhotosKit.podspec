@@ -13,7 +13,7 @@ LICENSE
 }
 s.author             = { "ZhaoBingDong" => "dongzhaobing@bayekeji.com" }
 s.platform           = :ios, "8.0"
-s.source       = { :git => 'https://github.com/ZhaoBingDong/CYPhotosLibrary.git', :tag => '1.2' }
+s.source       = { :git => 'https://github.com/ZhaoBingDong/CYPhotosLibrary.git', :tag => '1.3' }
 s.source_files  = 'CYPhotoKit/**/*.{h,m}'
 s.requires_arc = true
 s.resources          = 'CYPhotoKit/**/*.{bundle,xib}'
