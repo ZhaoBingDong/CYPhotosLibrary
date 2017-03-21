@@ -7,7 +7,6 @@
 //
 
 #import "CYPhotoGroupController.h"
-#import "CYPhoto.h"
 
 static NSString *const photoLibrayGroupCell   = @"CYPhotoLibrayGroupCell";
 static NSString *const smartAlbumsIdentifier = @"smartAlbumsIdentifier";
