@@ -10,5 +10,6 @@ s.author               = { "ZhaoBingDong" => "dongzhaobing@bayekeji.com" }
 s.source     	       = { :git => 'https://github.com/ZhaoBingDong/CYPhotosLibrary.git', :tag => "1.0.0" }
 s.source_files         = 'CYPhotoKit/**/*{.h,.m}'
 s.ios.deployment_target = '8.0'
-
+s.resource     = 'CYPhotoKit/ImageBundle.bundle'
+s.requires_arc = true
 end
