@@ -10,10 +10,11 @@
 #import "CYPhotosKit.h"
 
 @interface CYAuthorizedFailureViewController ()
-
+@property (nonatomic,copy,nonnull) NSURL *settingUrl;
 @end
 
 @implementation CYAuthorizedFailureViewController
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -26,10 +27,15 @@
     
     self.lockImageView.image               = [UIImage imageNamed:imageNameInBundle(@"lock.png") inBundle:bundleWithClass(self) compatibleWithTraitCollection:nil];
     
-    NSURL *url               = [NSURL URLWithString:@"prefs:root=Privacy&path=PHOTOS"];
-  
-    self.settingBtn.hidden   = ![[UIApplication sharedApplication] canOpenURL:url];
+    self.settingBtn.hidden   = ![[UIApplication sharedApplication] canOpenURL:self.settingUrl];
     
+}
+
+- (NSString *)settingUrl {
+    if (!_settingUrl) {
+        _settingUrl = [NSURL URLWithString:@"prefs:root=Privacy&path=PHOTOS"];
+    }
+    return _settingUrl;
 }
 
 - (void)back {
@@ -48,10 +54,8 @@
 }
 
 - (IBAction)settingButtonClick:(id)sender {
-    
-    NSURL *url               = [NSURL URLWithString:@"prefs:root=Privacy&path=PHOTOS"];
   
-    [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
+    [[UIApplication sharedApplication] openURL:self.settingUrl options:@{} completionHandler:^(BOOL success) {
         
     }];
 
