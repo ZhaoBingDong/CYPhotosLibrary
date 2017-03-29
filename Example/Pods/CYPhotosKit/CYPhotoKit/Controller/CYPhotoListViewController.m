@@ -43,7 +43,7 @@ static CGFloat const itemMarigin = 5.0f;
     CGFloat itemH                            = itemW;
     self.itemSize                            = CGSizeMake(itemW, itemH);
 
-    [self.collectionView registerNib:[UINib nibWithNibName:@"CYPhotosCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CYPhotosCollectionViewCell"];
+    [self.collectionView registerNib:[UINib nibWithNibName:@"CYPhotosCollectionViewCell" bundle:bundleWithClass(CYPhotosCollectionViewCell)] forCellWithReuseIdentifier:@"CYPhotosCollectionViewCell"];
     self.collectionView.alwaysBounceVertical = YES;
 
     self.navigationItem.rightBarButtonItem   = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStyleDone target:self action:@selector(dismiss)];
@@ -75,7 +75,7 @@ static CGFloat const itemMarigin = 5.0f;
  */
 - (IBAction)previewButtonClick:(id)sender {
     
-    CYPhotoPreviewViewController *previewVC = [[CYPhotoPreviewViewController alloc] init];
+    CYPhotoPreviewViewController *previewVC = [[CYPhotoPreviewViewController alloc] initWithNibName:@"CYPhotoPreviewViewController" bundle:bundleWithClass(CYPhotoPreviewViewController)];
     previewVC.soureImages                   = [self getSelectImagesArray];
     [self.navigationController pushViewController:previewVC animated:YES];
 

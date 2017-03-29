@@ -7,6 +7,7 @@
 //
 
 #import "CYAuthorizedFailureViewController.h"
+#import "CYPhotosKit.h"
 
 @interface CYAuthorizedFailureViewController ()
 
@@ -23,6 +24,11 @@
 
     self.title                             = @"照片";
     
+    self.lockImageView.image               = [UIImage imageNamed:imageNameInBundle(@"lock.png") inBundle:bundleWithClass(self) compatibleWithTraitCollection:nil];
+    
+    NSURL *url               = [NSURL URLWithString:@"prefs:root=Privacy&path=PHOTOS"];
+  
+    self.settingBtn.hidden   = ![[UIApplication sharedApplication] canOpenURL:url];
     
 }
 

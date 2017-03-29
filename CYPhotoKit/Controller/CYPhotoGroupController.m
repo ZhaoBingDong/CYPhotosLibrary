@@ -82,7 +82,12 @@ static NSString *const smartAlbumsIdentifier = @"smartAlbumsIdentifier";
 
 - (void)showAuthorizedFailureViewController {
 
-    CYAuthorizedFailureViewController *failureViewController = [[CYAuthorizedFailureViewController alloc] init];
+    UIActivityIndicatorView *_activityView = [[[UIApplication sharedApplication].delegate window] viewWithTag:1000];
+    if (_activityView != nil) {
+        [_activityView removeFromSuperview];
+    }
+    
+    CYAuthorizedFailureViewController *failureViewController = [[CYAuthorizedFailureViewController alloc] initWithNibName:@"CYAuthorizedFailureViewController" bundle:bundleWithClass(CYAuthorizedFailureViewController)];
     
     [self.navigationController pushViewController:failureViewController animated:NO];
 
@@ -140,7 +145,7 @@ static NSString *const smartAlbumsIdentifier = @"smartAlbumsIdentifier";
         _tableView                 = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
         _tableView.delegate        = self;
         _tableView.dataSource      = self;
-        [_tableView registerNib:[UINib nibWithNibName:@"CYPhotoLibrayGroupCell" bundle:nil] forCellReuseIdentifier:photoLibrayGroupCell];
+        [_tableView registerNib:[UINib nibWithNibName:@"CYPhotoLibrayGroupCell" bundle:bundleWithClass(CYPhotoLibrayGroupCell)] forCellReuseIdentifier:photoLibrayGroupCell];
         _tableView.tableFooterView = [UIView new];
     }
     return _tableView;
@@ -209,7 +214,9 @@ static NSString *const smartAlbumsIdentifier = @"smartAlbumsIdentifier";
  */
 - (void)openPhotosListViewController:(CYPhotosCollection*)photosCollection animated:(BOOL)animated {
 
-    CYPhotoListViewController *photoDetailVC = [[CYPhotoListViewController alloc] init];
+    NSBundle *bundle = [NSBundle bundleForClass:[CYPhotoListViewController class]];
+    
+    CYPhotoListViewController *photoDetailVC = [[CYPhotoListViewController alloc] initWithNibName:@"CYPhotoListViewController" bundle:bundle];
     photoDetailVC.fetchResult                = photosCollection.fetchResult;
     photoDetailVC.title                      = photosCollection.localizedTitle;
     [self.navigationController pushViewController:photoDetailVC animated:animated];

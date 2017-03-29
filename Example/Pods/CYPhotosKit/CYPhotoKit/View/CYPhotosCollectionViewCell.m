@@ -7,6 +7,7 @@
 //
 
 #import "CYPhotosCollectionViewCell.h"
+#import "CYPhotosKit.h"
 
 @interface CYPhotosCollectionViewCell ()
 @property (nonatomic,strong) UIView *coverView;
@@ -41,7 +42,8 @@
 - (UIButton *)selectButton {
     if (!_selectButton) {
         _selectButton                        = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_selectButton setImage:[UIImage imageNamed:@"ImageBundle.bundle/AssetsPickerChecked"] forState:UIControlStateNormal];
+        UIImage *img = [UIImage imageNamed:imageNameInBundle(@"AssetsPickerChecked") inBundle:bundleWithClass(self) compatibleWithTraitCollection:nil];
+        [_selectButton setImage:img forState:UIControlStateNormal];
         _selectButton.userInteractionEnabled = NO;
     }
     return _selectButton;

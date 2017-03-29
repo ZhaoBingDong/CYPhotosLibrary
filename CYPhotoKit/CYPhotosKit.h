@@ -30,6 +30,10 @@ if ([NSThread isMainThread]) {\
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block);\
 }
 
+// 获取当前文件所在的 bundle
+#define bundleWithClass(cls) [NSBundle bundleForClass:[cls class]]
+
+#define imageNameInBundle(_named) [NSString stringWithFormat:@"ImageBundle.bundle/%@",_named]
 
 
 #ifdef DEBUG

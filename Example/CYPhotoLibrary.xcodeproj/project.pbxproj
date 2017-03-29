@@ -18,7 +18,7 @@
 		2D9864E51E65609F007DE884 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9864E41E65609F007DE884 /* AppDelegate.m */; };
 		2D9864E81E6560A8007DE884 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9864E61E6560A8007DE884 /* ViewController.m */; };
 		2D9865241E657C5D007DE884 /* CYPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D9865231E657C5D007DE884 /* CYPhoto.m */; };
-		312765C61C21710420FE8CF9 /* Pods_CYPhotoLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B8DFB6BEF6F12D488CAC3 /* Pods_CYPhotoLibrary.framework */; };
+		BB4434767C56350A097F59A9 /* Pods_CYPhotoLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E484406C4F6BCD356B89FB6F /* Pods_CYPhotoLibrary.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,8 +62,8 @@
 		2D9865201E6561C7007DE884 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		2D9865221E657C5D007DE884 /* CYPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYPhoto.h; sourceTree = "<group>"; };
 		2D9865231E657C5D007DE884 /* CYPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYPhoto.m; sourceTree = "<group>"; };
-		347B8DFB6BEF6F12D488CAC3 /* Pods_CYPhotoLibrary.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CYPhotoLibrary.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBD932DF5B96BFF459BF6D03 /* Pods-CYPhotoLibrary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CYPhotoLibrary.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CYPhotoLibrary/Pods-CYPhotoLibrary.debug.xcconfig"; sourceTree = "<group>"; };
+		E484406C4F6BCD356B89FB6F /* Pods_CYPhotoLibrary.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CYPhotoLibrary.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				312765C61C21710420FE8CF9 /* Pods_CYPhotoLibrary.framework in Frameworks */,
+				BB4434767C56350A097F59A9 /* Pods_CYPhotoLibrary.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,7 +95,7 @@
 		075B8D6A18792963FA9768D5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				347B8DFB6BEF6F12D488CAC3 /* Pods_CYPhotoLibrary.framework */,
+				E484406C4F6BCD356B89FB6F /* Pods_CYPhotoLibrary.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

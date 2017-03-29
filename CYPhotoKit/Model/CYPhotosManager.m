@@ -8,7 +8,7 @@
 
 #import "CYPhotosManager.h"
 #import "CYPhotosCollection.h"
-
+#import "CYPhotosKit.h"
 @implementation CYPhotosManager
 
 + (instancetype)allocWithZone:(struct _NSZone *)zone {
@@ -131,7 +131,9 @@
     
     PHFetchResult *assetsFetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
     if (assetsFetchResult.count == 0) {
-        return [UIImage imageNamed:@"ImageBundle.bundle/xiangqing_add2"];
+        UIImage *img = [UIImage imageNamed:imageNameInBundle(@"xiangqing_add2") inBundle:bundleWithClass(self) compatibleWithTraitCollection:nil];
+
+        return img;
     }
     PHAsset *asset =[assetsFetchResult firstObject];
     return [self getImageWithAsset:asset];

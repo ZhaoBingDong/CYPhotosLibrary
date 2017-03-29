@@ -7,6 +7,7 @@
 //
 
 #import "CYPhotoLibrayGroupCell.h"
+#import "CYPhotosKit.h"
 
 @implementation CYPhotoLibrayGroupCell
 
@@ -16,7 +17,9 @@
     self.accessoryType                = UITableViewCellAccessoryDisclosureIndicator;
     self.photoImageView.contentMode   = UIViewContentModeScaleAspectFill;
     self.photoImageView.clipsToBounds = YES;
-    [self.photoImageView setImage:[UIImage imageNamed:@"xiangqing_add2"]];
+    UIImage *img = [UIImage imageNamed:imageNameInBundle(@"xiangqing_add2") inBundle:bundleWithClass(self) compatibleWithTraitCollection:nil];
+    
+    [self.photoImageView setImage:img];
     
 }
 

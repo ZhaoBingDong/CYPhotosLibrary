@@ -9,6 +9,7 @@
 #import "CYPhotoPreviewViewController.h"
 #import "CYPhotoPreviewCollectionViewCell.h"
 #import "CYPhotosAsset.h"
+#import "CYPhotosKit.h"
 
 @interface CYPhotoPreviewViewController () <UICollectionViewDelegate , UICollectionViewDataSource , UICollectionViewDelegateFlowLayout>
 
@@ -25,12 +26,13 @@
 
     self.view.backgroundColor              = [UIColor whiteColor];
     self.pageIndex                         = 0;
-    [self.collectionView registerNib:[UINib nibWithNibName:@"CYPhotoPreviewCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CYPhotoPreviewCollectionViewCell"];
+    [self.collectionView registerNib:[UINib nibWithNibName:@"CYPhotoPreviewCollectionViewCell" bundle:bundleWithClass(CYPhotoPreviewCollectionViewCell)] forCellWithReuseIdentifier:@"CYPhotoPreviewCollectionViewCell"];
     self.collectionView.delegate           = self;
     self.collectionView.dataSource         = self;
 
     UIButton *checkBoxBtn                  = [UIButton buttonWithType:UIButtonTypeCustom];
-    [checkBoxBtn setImage:[UIImage imageNamed:@"ImageBundle.bundle/AssetsPickerChecked@3x"] forState:UIControlStateSelected];
+    [checkBoxBtn setImage:[UIImage imageNamed:imageNameInBundle(@"AssetsPickerChecked") inBundle:bundleWithClass(self) compatibleWithTraitCollection:nil] forState:UIControlStateSelected];
+
     [checkBoxBtn addTarget:self action:@selector(checkBoxClick:) forControlEvents:UIControlEventTouchUpInside];
     checkBoxBtn.frame                      = CGRectMake(0.0f, 0.0f, 30.0f, 30.0f);
     self.checkBoxButton                    = checkBoxBtn;

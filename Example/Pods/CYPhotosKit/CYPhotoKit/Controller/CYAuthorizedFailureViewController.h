@@ -13,5 +13,7 @@
 @interface CYAuthorizedFailureViewController : UIViewController
 
 - (IBAction)settingButtonClick:(id)sender;
+@property (weak, nonatomic) IBOutlet UIImageView *lockImageView;
+@property (weak, nonatomic) IBOutlet UIButton *settingBtn;
 
 @end
