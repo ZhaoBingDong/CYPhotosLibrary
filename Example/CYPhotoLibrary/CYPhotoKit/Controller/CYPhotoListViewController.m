@@ -8,12 +8,10 @@
 //
 #import "CYPhotosAsset.h"
 #import <Photos/Photos.h>
-#import "CYPhotosCollection.h"
 #import "CYPhotoListViewController.h"
 #import "CYPhotosCollectionViewCell.h"
+#import "CYPhotosKit.h"
 #import "CYPhotoPreviewViewController.h"
-#import "CYPhotoNavigationController.h"
-
 
 static CGFloat const itemMarigin = 5.0f;
 

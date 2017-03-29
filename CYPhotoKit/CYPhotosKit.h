@@ -11,17 +11,12 @@
 
 #import <UIKit/UIKit.h>
 #import "CYPhotoNavigationController.h"
-#import "CYPhotoGroupController.h"
 #import "CYPhotosManager.h"
-#import "CYPhotoLibrayGroupCell.h"
 #import "CYPhotosAsset.h"
 #import "CYPhotosCollection.h"
-#import "CYPhotoListViewController.h"
-#import "CYAuthorizedFailureViewController.h"
-#import "CYCollectionViewCell.h"
 
 
-#define mainWindow [[[UIApplication sharedApplication]delegate]window]
+#define appWindow [[[UIApplication sharedApplication]delegate]window]
 
 #define dispatch_main_safe(block)\
 if ([NSThread isMainThread]) {\

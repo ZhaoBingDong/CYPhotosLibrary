@@ -7,6 +7,10 @@
 //
 
 #import "CYPhotoGroupController.h"
+#import "CYPhotosKit.h"
+#import "CYAuthorizedFailureViewController.h"
+#import "CYPhotoLibrayGroupCell.h"
+#import "CYPhotoListViewController.h"
 
 static NSString *const photoLibrayGroupCell   = @"CYPhotoLibrayGroupCell";
 static NSString *const smartAlbumsIdentifier = @"smartAlbumsIdentifier";
@@ -26,7 +30,7 @@ static NSString *const smartAlbumsIdentifier = @"smartAlbumsIdentifier";
 
     [self setup];
     
-    UIWindow *window  = mainWindow;
+    UIWindow *window  = appWindow;
     UIActivityIndicatorView *_activityView  = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     _activityView.frame                     = CGRectMake(0.0f, 0.0f, 40.0f, 40.0f);
     _activityView.hidesWhenStopped          = YES;

@@ -44,11 +44,10 @@
 - (IBAction)settingButtonClick:(id)sender {
     
     NSURL *url               = [NSURL URLWithString:@"prefs:root=Privacy&path=PHOTOS"];
-    BOOL canOpenPhotoSetting = [[UIApplication sharedApplication] canOpenURL:url];
-    if (canOpenPhotoSetting) {
-        [[UIApplication sharedApplication] openURL:url];
-    }
-    
+  
+    [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
+        
+    }];
 
 
 }

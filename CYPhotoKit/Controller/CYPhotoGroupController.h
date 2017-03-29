@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Photos/Photos.h>
+
 /**
  *  所有相册分组的控制器
  */
