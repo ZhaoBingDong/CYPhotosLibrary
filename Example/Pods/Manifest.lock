@@ -1,12 +1,12 @@
 PODS:
-  - CYPhotosKit (2.5.0)
+  - CYPhotosKit (2.6.0)
 
 DEPENDENCIES:
-  - CYPhotosKit (~> 2.5.0)
+  - CYPhotosKit (~> 2.6.0)
 
 SPEC CHECKSUMS:
-  CYPhotosKit: da6ed3a09957bdd5b1ae541229bcc8960bc6455a
+  CYPhotosKit: d72aa7a2c98e2ed437464db3a26e5b562d965a1d
 
-PODFILE CHECKSUM: b61dcd6e5fcaaf3c341897235f79aac84dbe4f1e
+PODFILE CHECKSUM: a58d15964e6d957fc95a53c79d363eb9c5b844d5
 
 COCOAPODS: 1.2.0

@@ -152,10 +152,19 @@ static CGFloat const itemMarigin = 5.0f;
     
     void (^block) () = ^ {
         __strong typeof(weakSelf)strongSelf = weakSelf;
-        for (int i=0; i<_fetchResult.count; i++) {
-            NSString *key = [NSString stringWithFormat:@"%d",i];
+//        CFTimeInterval start = CFAbsoluteTimeGetCurrent();
+        
+        NSInteger fetchCount = _fetchResult.count;
+        dispatch_apply(fetchCount, dispatch_get_global_queue(0, 0), ^(size_t i) {
+            NSString *key = [NSString stringWithFormat:@"%zd",i];
             [strongSelf.cacheSelectItems setObject:@"0" forKey:key];
-        }
+//            NSLog(@"thread = %@",[NSThread currentThread]);
+        });
+//        
+//        CFTimeInterval end = CFAbsoluteTimeGetCurrent();
+//        NSLog(@"time = %f",end-start);
+//        
+//        
     };
     
     dispatch_global_safe(block);

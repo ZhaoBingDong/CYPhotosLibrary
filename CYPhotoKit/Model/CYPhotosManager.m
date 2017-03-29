@@ -47,24 +47,27 @@
  *  系统创建的一些相册
  */
 - (NSMutableArray <CYPhotosCollection *>*_Nullable)requestSmartAlbums {
+    
     __weak typeof(self)weakSelf         = self;
     PHFetchResult *smartAlbums          = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
 
     __block NSMutableArray *photoGroups = [NSMutableArray array];
-    [smartAlbums enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL * _Nonnull stop) {
+    
+    dispatch_apply(smartAlbums.count, dispatch_get_global_queue(0, 0), ^(size_t idx) {
         __strong typeof(weakSelf)strongSelf = weakSelf;
+        PHAssetCollection *collection = [smartAlbums objectAtIndex:idx];
         PHFetchResult *assetsFetchResult    = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
         if ([strongSelf needAddPhotoGroup:collection] && assetsFetchResult.count>0) {
             
             PHFetchResult *assetsFetchResult = [PHAsset fetchAssetsInAssetCollection:(PHAssetCollection *)collection options:nil];
             CYPhotosCollection *photoAsset   = [CYPhotosCollection new];
             photoAsset.count                 = [NSString stringWithFormat:@"%lu",(unsigned long)assetsFetchResult.count];
-            photoAsset.thumbnail             = [self getNearByImage:(PHAssetCollection *)collection];
+            photoAsset.thumbnail             = [strongSelf getNearByImage:(PHAssetCollection *)collection];
             photoAsset.fetchResult           = assetsFetchResult;
-            photoAsset.localizedTitle        = [self getPhotoGroupName:collection];
+            photoAsset.localizedTitle        = [strongSelf getPhotoGroupName:collection];
             [photoGroups addObject:photoAsset];
         }
-    }];
+    });
 
     return photoGroups;
 
@@ -74,20 +77,26 @@
  */
 - (NSMutableArray <CYPhotosCollection *>*_Nullable)requestTopLevelUserCollections {
     
+    __weak typeof(self)weakSelf             = self;
+
     PHFetchResult *topLevelUserCollections  = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
     __block NSMutableArray *userPhotoGroups = [NSMutableArray array];
-    [topLevelUserCollections enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL * _Nonnull stop) {
+    
+    dispatch_apply(topLevelUserCollections.count, dispatch_get_global_queue(0, 0), ^(size_t idx) {
+        __strong typeof(weakSelf)strongSelf = weakSelf;
+        PHAssetCollection *collection = [topLevelUserCollections objectAtIndex:idx];
         PHFetchResult *assetsFetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
         if (assetsFetchResult.count>0) {
             PHFetchResult *assetsFetchResult = [PHAsset fetchAssetsInAssetCollection:(PHAssetCollection *)collection options:nil];
             CYPhotosCollection *photoAsset   = [CYPhotosCollection new];
             photoAsset.count                 = [NSString stringWithFormat:@"%lu",(unsigned long)assetsFetchResult.count];
-            photoAsset.thumbnail             = [self getNearByImage:(PHAssetCollection *)collection];
+            photoAsset.thumbnail             = [strongSelf getNearByImage:(PHAssetCollection *)collection];
             photoAsset.fetchResult           = assetsFetchResult;
-            photoAsset.localizedTitle        = [self getPhotoGroupName:collection];
+            photoAsset.localizedTitle        = [strongSelf getPhotoGroupName:collection];
             [userPhotoGroups addObject:photoAsset];
         }
-    }];
+    });
+
     return userPhotoGroups;
 }
 /**
