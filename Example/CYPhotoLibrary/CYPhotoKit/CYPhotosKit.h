@@ -15,7 +15,6 @@
 #import "CYPhotosAsset.h"
 #import "CYPhotosCollection.h"
 
-
 #define appWindow [[[UIApplication sharedApplication]delegate]window]
 
 #define dispatch_main_safe(block)\
