@@ -7,8 +7,8 @@
 //
 
 #import "ViewController.h"
-#import "CYPhotosKit.h"
 #import "CYPhoto.h"
+#import <CYPhotosKit/CYPhotosKit.h>
 #import "CYCollectionViewCell.h"
 
 static CGFloat const itemMarigin = 5.0f;
