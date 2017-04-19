@@ -155,12 +155,11 @@ static CGFloat const itemMarigin = 5.0f;
 //        CFTimeInterval start = CFAbsoluteTimeGetCurrent();
         
         NSInteger fetchCount = _fetchResult.count;
-        dispatch_apply(fetchCount, dispatch_get_global_queue(0, 0), ^(size_t i) {
+        for (int i=0; i<fetchCount; i++) {
             NSString *key = [NSString stringWithFormat:@"%zd",i];
             [strongSelf.cacheSelectItems setObject:@"0" forKey:key];
-//            NSLog(@"thread = %@",[NSThread currentThread]);
-        });
-//        
+        }
+//
 //        CFTimeInterval end = CFAbsoluteTimeGetCurrent();
 //        NSLog(@"time = %f",end-start);
 //        
