@@ -171,34 +171,18 @@ static CGFloat const itemMarigin = 5.0f;
     
 }
 
-/**
- 检查需要几张上传的图片
- */
-- (NSInteger) getNeedsImageCount {
-    
-    CYPhoto *photos = [self.dataArray lastObject];
-    if (photos != nil) {
-        if (photos.type == CYPhotoAssetTypeAdd) {
-            return 10 - self.dataArray.count;
-        }
-    }
-    
-    return 0;
-}
-
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
     CYPhoto *photo          = [self.dataArray objectAtIndex:indexPath.item];
     if (photo.type == CYPhotoAssetTypePhoto) return;
     
-    UIAlertController *controller = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:(UIAlertControllerStyleActionSheet)];
-    __weak typeof(self)weakSelf = self;
+    UIAlertController *controller   = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:(UIAlertControllerStyleActionSheet)];
+    __weak typeof(self)weakSelf     = self;
     [controller addAction:[UIAlertAction actionWithTitle:@"从手机选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         __strong typeof(weakSelf)strongSelf = weakSelf;
-        CYPhotoNavigationController *cyPhotoNav = [CYPhotoNavigationController showPhotosViewController];
-        cyPhotoNav.maxPickerImageCount = [strongSelf getNeedsImageCount];
-        cyPhotoNav.delegate    = strongSelf;
+        CYPhotoNavigationController * cyPhotoNav = [CYPhotoNavigationController showPhotosViewController];
+        cyPhotoNav.delegate            = strongSelf;
         [strongSelf presentViewController:cyPhotoNav animated:YES completion:nil];
         
     }]];
@@ -253,21 +237,24 @@ static CGFloat const itemMarigin = 5.0f;
     NSMutableArray *array   = [NSMutableArray array];
     for (CYPhotosAsset *photoAsset in result) {
         
-        CYPhoto *photo    = [[CYPhoto alloc] init];
-        photo.type        = CYPhotoAssetTypePhoto;
-        photo.image       = nil;
-        photo.photosAsset = photoAsset;
+        CYPhoto *photo      = [[CYPhoto alloc] init];
+        photo.type          = CYPhotoAssetTypePhoto;
+        photo.image         = nil;
+        photo.photosAsset   = photoAsset;
         [array addObject:photo];
+        
     }
+
+    self.dataArray          = array;
     
-    NSIndexSet *idnexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, array.count)];
-    [self.dataArray insertObjects:array atIndexes:idnexSet];
-    
-    if (self.dataArray.count >=10) {
+    if (self.dataArray.count >= 10) {
         [self.dataArray removeLastObject];
+    } else if (self.dataArray.count < 9) {
+        [self loadDatas];
     }
     
     [self.collectionView reloadData];
+    
     
 }
 
@@ -309,8 +296,7 @@ static CGFloat const itemMarigin = 5.0f;
     
     NSIndexPath *selectIndexPath = [self.collectionView indexPathForItemAtPoint:[self.longPressMoving locationInView:self.collectionView]];
     if (!selectIndexPath) return;
-    
-//    self.dataSource.exchangeObject(at: ((sourceIndexPath as NSIndexPath).item), withObjectAt: (destinationIndexPath as NSIndexPath).item)
+
     
     [self.dataArray exchangeObjectAtIndex:sourceIndexPath.item withObjectAtIndex:destinationIndexPath.item];
     
@@ -335,21 +321,30 @@ static CGFloat const itemMarigin = 5.0f;
     
     NSIndexPath *indexPath  = [self.collectionView indexPathForCell:cell];
     
-    [self.dataArray removeObjectAtIndex:indexPath.item];
+    CYPhoto *photo = self.dataArray[indexPath.item];
+    
+    // 从图片管理器中移除已经选择过的图片
+
+    [[CYPhotosManager defaultManager] removeSelectPhotoForKey:photo.asset.localIdentifier];
+    
+    [self.dataArray removeObject:photo];
+    
+    
     [self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
     
-    CYPhoto *lastPhotot = [self.dataArray lastObject];
+    CYPhoto *lastPhotot     = [self.dataArray lastObject];
     
     if (lastPhotot.type != CYPhotoAssetTypeAdd) {
-        
-        CYPhoto *photo   = [[CYPhoto alloc] init];
-        photo.type  = CYPhotoAssetTypeAdd;
-        photo.image = [UIImage imageNamed:@"hubs_uploadImage"];
-        [self.dataArray addObject:photo];
-        [self.collectionView reloadData];
-        
+        [self loadDatas];
     }
 
+    
+}
+
+
+- (void)dealloc {
+    
+    [[CYPhotosManager defaultManager] emptySelectedList];
     
 }
 

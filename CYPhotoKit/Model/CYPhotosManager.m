@@ -16,6 +16,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _photoManager = [super allocWithZone:zone];
+        [[NSNotificationCenter defaultCenter] addObserver:_photoManager selector:@selector(emptySelectedList) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
     });
     return _photoManager;
 }
@@ -159,5 +160,34 @@
     return sourceImage;
 }
 
+- (NSMutableDictionary<NSString *,CYPhotosAsset *> *)selectImages {
+    if (!_selectImages) {
+        _selectImages = [NSMutableDictionary dictionary];
+    }
+    return _selectImages;
+}
+
+/**
+ 移除掉已经选择过的图片
+ */
+- (void) removeSelectPhotoForKey:(NSString *_Nullable)localIdentifier{
+    
+    if (!localIdentifier || [self.selectImages count] ==0 ) return;
+    [self.selectImages removeObjectForKey:localIdentifier];
+}
+/**
+ 清空所有已经选择过图片数组
+ */
+- (void)emptySelectedList {
+    
+    if (self.selectImages) {
+        [self.selectImages removeAllObjects];
+    }
+    
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 @end
