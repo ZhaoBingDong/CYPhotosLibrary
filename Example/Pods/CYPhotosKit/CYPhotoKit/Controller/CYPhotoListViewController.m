@@ -33,7 +33,6 @@ static CGFloat const itemMarigin = 5.0f;
     [super viewDidLoad];
     
     [self setup];
-    [self loadDatas];
     
 }
 
@@ -59,46 +58,6 @@ static CGFloat const itemMarigin = 5.0f;
     CYPhotoNavigationController *nav         = (CYPhotoNavigationController *)self.navigationController;
     self.maxCount                            = nav.maxPickerImageCount;
     self.maxImageLabel.text                  = [NSString stringWithFormat:@"最多可选取%@张相片",@(self.maxCount)];
-
-    
-}
-
-- (void) loadDatas {
-    
-    __weak typeof(self)weakSelf = self;
-    
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        
-        __strong typeof(weakSelf)strongSelf = weakSelf;
-        
-//        CFTimeInterval start = CFAbsoluteTimeGetCurrent();
-        
-        NSDictionary <NSString *,CYPhotosAsset *>*selectItems    = [CYPhotosManager defaultManager].selectImages;
-        
-        NSInteger fetchCount = _fetchResult.count;
-        for (int i=0; i<fetchCount; i++) {
-            
-            PHAsset *photoAsset         = [_fetchResult objectAtIndex:i];
-            NSString *key               = [NSString stringWithFormat:@"%zd",i];
-            BOOL isSelect               = NO;
-            
-            // 选择过的资源
-            CYPhotosAsset *selectAsset  = [selectItems objectForKey:photoAsset.localIdentifier];
-            if (selectAsset && [selectAsset.localIdentifier isEqualToString:photoAsset.localIdentifier]) {
-                self.selectAssetDictionary[key] = photoAsset;
-                isSelect = YES;
-            }
-            
-            [strongSelf.cacheSelectItems setObject:[NSNumber numberWithBool:isSelect] forKey:key];
-            
-        }
-//        
-//        CFTimeInterval end = CFAbsoluteTimeGetCurrent();
-//        NSLog(@"time = %f",end-start);
-        
-        [self performSelectorOnMainThread:@selector(reloadBottomViewStatus) withObject:nil waitUntilDone:YES];
-        
-    });
 
     
 }
@@ -188,6 +147,40 @@ static CGFloat const itemMarigin = 5.0f;
 - (void)setFetchResult:(PHFetchResult<PHAsset *> *)fetchResult {
     _fetchResult            = fetchResult;
     
+    __weak typeof(self)weakSelf = self;
+
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        
+        __strong typeof(weakSelf)strongSelf = weakSelf;
+
+        CFTimeInterval start = CFAbsoluteTimeGetCurrent();
+        
+        NSDictionary <NSString *,CYPhotosAsset *>*selectItems    = [CYPhotosManager defaultManager].selectImages;
+        
+        NSInteger fetchCount = _fetchResult.count;
+        for (int i=0; i<fetchCount; i++) {
+            
+            PHAsset *photoAsset         = [_fetchResult objectAtIndex:i];
+            NSString *key               = [NSString stringWithFormat:@"%zd",i];
+            BOOL isSelect               = NO;
+            
+            // 选择过的资源
+            CYPhotosAsset *selectAsset  = [selectItems objectForKey:photoAsset.localIdentifier];
+            if (selectAsset && [selectAsset.asset.localIdentifier isEqualToString:photoAsset.localIdentifier]) {
+                self.selectAssetDictionary[key] = photoAsset;
+                isSelect = YES;
+            }
+            
+            [strongSelf.cacheSelectItems setObject:[NSNumber numberWithBool:isSelect] forKey:key];
+            
+        }
+        
+        CFTimeInterval end = CFAbsoluteTimeGetCurrent();
+        NSLog(@"time = %f",end-start);
+        
+        [self performSelectorOnMainThread:@selector(reloadBottomViewStatus) withObject:nil waitUntilDone:YES];
+        
+    });
     
     
     

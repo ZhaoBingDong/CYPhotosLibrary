@@ -2,4 +2,5 @@
 platform :ios, ‘9.0’
 use_frameworks!
 target 'CYPhotoLibrary' do
+pod 'CYPhotosKit' 
 end
