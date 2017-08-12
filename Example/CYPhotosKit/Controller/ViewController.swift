@@ -89,7 +89,7 @@ extension ViewController : UICollectionViewDelegate , UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         let cell  = collectionView.dequeueReusableCell(withReuseIdentifier: "CYCollectionViewCell", for: indexPath) as! CYCollectionViewCell
-        cell.contentView.backgroundColor    = .red
+        cell.contentView.backgroundColor    = .white
         cell.delegate                       = self
         let photo                           = dataArray[indexPath.item]
 

@@ -8,7 +8,6 @@
 
 import UIKit
 import Photos
-import CYPhotosKit
 
 enum CYPhotoAssetType : Int {
     case add = 1
