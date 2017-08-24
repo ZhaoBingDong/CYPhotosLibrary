@@ -33,6 +33,8 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>是否打开相机</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>是否允许访问相册功能</string>
 	<key>UILaunchStoryboardName</key>

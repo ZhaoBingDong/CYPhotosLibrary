@@ -10,7 +10,7 @@ import UIKit
 import Photos
 public class CYPhotoGroupController: UIViewController {
 
-    private var sectionFetchResults : [[CYPhotosCollection]]?
+    private var sectionFetchResults : [CYPhotosCollection] = [CYPhotosCollection]()
     lazy private var tableView : UITableView = {
         let tableView = UITableView(frame: CGRect.init(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height), style:.plain)
         tableView.tableFooterView = UIView()
@@ -32,6 +32,12 @@ public class CYPhotoGroupController: UIViewController {
         self.navigationItem.rightBarButtonItem   = UIBarButtonItem(title: "取消", style: .done, target: self, action: #selector(dismissViewController))
         title                                    = "照片"
 
+        view.addSubview(tableView)
+        tableView.register(CYPhotoLibrayGroupCell.self, forCellReuseIdentifier: "CYPhotoLibrayGroupCell")
+        tableView.rowHeight         = 80.0
+        tableView.delegate          = self
+        tableView.dataSource        = self
+        
     }
     /*
      请求访问相册的权限
@@ -44,6 +50,7 @@ public class CYPhotoGroupController: UIViewController {
             return
         }
 
+        
         PHPhotoLibrary.requestAuthorization { (status) in
             switch status {
             case .authorized:
@@ -72,18 +79,15 @@ public class CYPhotoGroupController: UIViewController {
      */
     @objc private func photosAuthorizedSuccess() {
 
-        view.addSubview(tableView)
-        tableView.delegate           = self
-        tableView.dataSource        = self
-        tableView.register(CYPhotoLibrayGroupCell.self, forCellReuseIdentifier: "CYPhotoLibrayGroupCell")
-        tableView.rowHeight         = 80.0
-        let photosManager           = CYPhotosManager.defaultManager
-        let dataArray               = [[photosManager.allPhotosOptions],photosManager.smartAlbums,photosManager.topLevelUserCollections]
-        if let photoCollection = dataArray.first?.first {
+        let photosManager           = CYPhotosManager.default
+        let dataArray               = photosManager.allCollections
+        if let photoCollection = dataArray.first {
             self.openPhotosListViewController(with: photoCollection, animated: false)
         }
-        self.sectionFetchResults = dataArray
-        self.tableView.perform(#selector(UITableView.reloadData), with: nil, afterDelay: 0.5)
+        self.sectionFetchResults     = dataArray
+        self.tableView.reloadData()
+        NotificationCenter.default.addObserver(self, selector: #selector(photoLibraryDidChange), name: Notification.Name.init("PHPhotoLibraryChangeObserver"), object: nil)
+        
     }
 
     @objc private func showAuthorizationViewController(_ viewController : CYAuthorizedFailureViewController) {
@@ -93,54 +97,62 @@ public class CYPhotoGroupController: UIViewController {
 
     private func openPhotosListViewController(with photosCollection : CYPhotosCollection ,animated :Bool) {
         guard photosCollection.fetchResult?.count != nil else { return }
-        let photoDetailVC           = CYPhotoListViewController()
-        photoDetailVC.fetchResult   = photosCollection.fetchResult
-        photoDetailVC.title         = photosCollection.localizedTitle
+        let photoDetailVC            = CYPhotoListViewController()
+        photoDetailVC.fetchResult    = photosCollection.allObjects
+        photoDetailVC.title          = photosCollection.localizedTitle
         self.navigationController?.pushViewController(photoDetailVC, animated: animated)
     }
 
     deinit {
-        NSLog("self dealloc ")
+//        NSLog("self dealloc ")
+        NotificationCenter.default.removeObserver(self)
     }
-
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
+    }
 
 }
 
 //MARK: UITableViewDelegate & UITableViewDataSource
 extension CYPhotoGroupController : UITableViewDelegate , UITableViewDataSource {
-
-    public func numberOfSections(in tableView: UITableView) -> Int {
-        return self.sectionFetchResults?.count ?? 0
-    }
-
+   
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let array = self.sectionFetchResults![section]
-        return section == 0 ? 1 : array.count
+        return self.sectionFetchResults.count
     }
-
+    
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell : CYPhotoLibrayGroupCell = tableView.dequeueReusableCell(withIdentifier: "CYPhotoLibrayGroupCell") as! CYPhotoLibrayGroupCell
-
-        if let  fetchResult    = self.sectionFetchResults?[indexPath.section] {
-            let  photosCollection = fetchResult[indexPath.row]
-            cell.photoImageView.image   = photosCollection.thumbnail
-            cell.titleLabel.text        = String.init(format: "%@ (%@)", arguments: [photosCollection.localizedTitle!,photosCollection.count!])
-        }
-
+        
+        let  photosCollection        = self.sectionFetchResults[indexPath.row]
+        cell.photoImageView.image   = photosCollection.thumbnail
+        cell.titleLabel.text        = String.init(format: "%@ (%@)", arguments: [photosCollection.localizedTitle!,photosCollection.count!])
+        
+        photosCollection.getSelectImageCount(close: { (count) in
+            cell.badgeValue.isHidden = count == 0
+            print("IndexPath : \(indexPath.row) count :\(count)")
+        })
+        
         return cell
     }
 
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        tableView.deselectRow(at: indexPath, animated: true)
-
-        if let  fetchResult    = self.sectionFetchResults?[indexPath.section]  {
-            let  photosCollection = fetchResult[indexPath.row]
-            openPhotosListViewController(with: photosCollection, animated: true)
-        }
-
+        let  photosCollection    = self.sectionFetchResults[indexPath.item]
+        openPhotosListViewController(with: photosCollection, animated: true)
 
     }
 
     
+}
+
+
+// MARK: PHPhotoLibraryChangeObserver
+extension CYPhotoGroupController  {
+    
+    @objc public func photoLibraryDidChange() {
+        self.sectionFetchResults     = CYPhotosManager.default.allCollections
+    }
 }

@@ -35,7 +35,7 @@ public class CYPhotoPreviewViewController: UIViewController {
         let btn                                   = UIButton(type: .custom)
         btn.frame                                 = CGRect(x: bottomView.frame.maxX-55.0, y: 0.0, width: 40.0, height:44.0)
         btn.titleLabel?.font                      = UIFont.systemFont(ofSize: 15.0)
-        btn.setTitleColor(tintColor, for: .normal)
+        btn.setTitleColor(BaseTintColor, for: .normal)
         btn.setTitle("完成", for: .normal)
         btn.addTarget(self, action: #selector(finishedButtonClick(_:)), for: .touchUpInside)
         self.bottomView.addSubview(btn)
@@ -48,7 +48,7 @@ public class CYPhotoPreviewViewController: UIViewController {
         label.font                 = UIFont.systemFont(ofSize: 15.0)
         label.textAlignment        = .center
         label.textColor            = .white
-        label.backgroundColor      = tintColor
+        label.backgroundColor      = BaseTintColor
         label.layer.cornerRadius        = 10.0
         label.layer.masksToBounds       = true
         self.bottomView.addSubview(label)
@@ -64,7 +64,7 @@ public class CYPhotoPreviewViewController: UIViewController {
 
         guard let images = soureImages else { return }
         for photo in images {
-            photo.isSelectedImage = true
+            photo.isSelect = true
         }
 
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
@@ -99,7 +99,7 @@ public class CYPhotoPreviewViewController: UIViewController {
 
     //  更新底部工具条的显示状态
     @objc private func reloadBottomViewStatus() {
-        let selectItemCount             = CYPhotosManager.defaultManager.selectImages.count
+        let selectItemCount             = CYPhotosManager.default.selectImages.count
         finishedButton.isEnabled        =  selectItemCount>0
         finishedButton.alpha            = selectItemCount == 0 ? 0.5 : 1.0
         countLabel.isHidden             = (selectItemCount == 0)
@@ -115,13 +115,13 @@ public class CYPhotoPreviewViewController: UIViewController {
 
     @objc private func checkBoxClick(_ btn:UIButton) {
         let            photoAsset         = self.soureImages![self.pageIndex];
-        photoAsset.isSelectedImage        = !photoAsset.isSelectedImage;
-        self.checkBoxButton?.isSelected   = photoAsset.isSelectedImage
-        let key                           = photoAsset.localIdentifier ?? ""
-        if photoAsset.isSelectedImage {
-            CYPhotosManager.defaultManager.selectImages[key] = photoAsset.asset
+        photoAsset.isSelect               = !photoAsset.isSelect;
+        self.checkBoxButton?.isSelected   = photoAsset.isSelect
+        let key                           = photoAsset.localIdentifier
+        if photoAsset.isSelect {
+            CYPhotosManager.default.selectImages[key] = photoAsset
         } else {
-            CYPhotosManager.defaultManager.removeSelectPhotos(forKey: key)
+            CYPhotosManager.default.removeSelectPhotos(forKey: key)
         }
         reloadBottomViewStatus()
         delegate?.didSelectItem(self, selectPhotoAsset: photoAsset)
@@ -129,7 +129,7 @@ public class CYPhotoPreviewViewController: UIViewController {
 
     private func setCheckBoxButtonState(_ index : Int) {
         let     photoAsset               = self.soureImages![index]
-        self.checkBoxButton?.isSelected  = photoAsset.isSelectedImage
+        self.checkBoxButton?.isSelected  = photoAsset.isSelect
         self.pageIndex                   = index
     }
 
@@ -142,9 +142,8 @@ public class CYPhotoPreviewViewController: UIViewController {
 
     private func getSelectImagesArray() -> [CYPhotosAsset] {
         var array           = [CYPhotosAsset]()
-        for asset in CYPhotosManager.defaultManager.selectImages.values {
-            let photosAsset = CYPhotosAsset(photoAsset: asset)
-            array.append(photosAsset)
+        for asset in CYPhotosManager.default.selectImages.values {
+            array.append(asset)
         }
         return array
     }

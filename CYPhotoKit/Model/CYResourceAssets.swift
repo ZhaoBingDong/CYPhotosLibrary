@@ -20,6 +20,7 @@ open class CYResourceAssets: NSObject {
     open class var fullImageSelected: UIImage { return CYResourceAssets.bundledImage(named: "photo_original_sel") }
 
     open class var locked : UIImage { return CYResourceAssets.bundledImage(named: "lock") }
+    open class var takePhotos : UIImage { return CYResourceAssets.bundledImage(named: "takePicture") }
 
 
     internal class func bundledImage(named name: String) -> UIImage {

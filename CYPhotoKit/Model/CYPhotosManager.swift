@@ -9,19 +9,40 @@
 import UIKit
 import Photos
 
+extension Array where Element : Equatable {
+    
+    /// 在当前数组末尾追加元素
+    public mutating func insert(from array : [Element]) {
+        for obj in array {
+            self.append(obj)
+        }
+    }
+}
 /**
  *  照片资源获取的管理者
  */
 public class CYPhotosManager: NSObject {
 
-    public static let defaultManager : CYPhotosManager = CYPhotosManager()
+    public static let `default` : CYPhotosManager = CYPhotosManager()
     private  override init() {   }
-    public var  allPhotosOptions : CYPhotosCollection {
+    
+    public var allCollections : [CYPhotosCollection] {
+        get {
+            var collections      = [CYPhotosCollection]()
+            collections.insert(from: [allPhotosOptions])
+            collections.insert(from: smartAlbums)
+            collections.insert(from: topLevelUserCollections)
+            return collections
+        }
+    }
+    
+    /// 相机胶卷
+    private var  allPhotosOptions : CYPhotosCollection {
         get {
             let allPhotosOptions             = PHFetchOptions()
             allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
             let allPhotos                    = PHAsset.fetchAssets(with: allPhotosOptions)
-            let asset                        = allPhotos.firstObject
+            let asset                        = allPhotos.lastObject
             let photoCollection              = CYPhotosCollection()
             photoCollection.count            = String(format: "%d", allPhotos.count)
             photoCollection.thumbnail        = getImage(with: asset)
@@ -35,7 +56,7 @@ public class CYPhotosManager: NSObject {
         get {
             var totalSize : Double = 0.0
             for photo in selectImages.values {
-                let photoAsset = CYPhotosAsset(photoAsset: photo)
+                let photoAsset = photo
                 totalSize+=photoAsset.originalImgLength
             }
             return totalSize
@@ -55,7 +76,7 @@ public class CYPhotosManager: NSObject {
     /**
      *  系统创建的一些相册
      */
-    public var  smartAlbums : [CYPhotosCollection] {
+    private var  smartAlbums : [CYPhotosCollection] {
 
         let smartAlbums                 =  PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
         var photoGroups                 = [CYPhotosCollection]()
@@ -76,7 +97,7 @@ public class CYPhotosManager: NSObject {
     /**
      *  用户自己创建的相册
      */
-    public var topLevelUserCollections : [CYPhotosCollection] {
+    private var topLevelUserCollections : [CYPhotosCollection] {
 
         let topLevelUserCollections               =  PHCollectionList.fetchTopLevelUserCollections(with: nil)
         var userPhotoGroups                       = [CYPhotosCollection]()
@@ -95,11 +116,20 @@ public class CYPhotosManager: NSObject {
         }
         return userPhotoGroups
     }
+    
+    public func getCollection(with groupName : String) ->CYPhotosCollection? {
+    
+        func filter(collection : CYPhotosCollection) -> Bool {
+            return collection.localizedTitle == groupName
+        }
+        let collections = allCollections.filter(filter)
+        return collections.first
+    }
     /**
      已经选择过的图片数组
      */
-    public lazy var selectImages : [String : PHAsset] = {
-        return [String : PHAsset]()
+    public lazy var selectImages : [String : CYPhotosAsset] = {
+        return [String : CYPhotosAsset]()
     }()
     /**
      移除掉已经选择过的图片
@@ -114,7 +144,7 @@ public class CYPhotosManager: NSObject {
     public func emptySelectedList() {
         selectImages.removeAll()
     }
-    private func getImage(with asset : PHAsset?) -> UIImage? {
+    private func getImage(with asset : CYPhotosAsset?) -> UIImage? {
         guard asset             != nil else { return nil }
         let  imageManager       = PHImageManager.default()
         weak var sourceImage : UIImage?
@@ -174,7 +204,7 @@ public class CYPhotosManager: NSObject {
         if assetsFetchResult.count == 0 {
             return CYResourceAssets.addIcon
         } else {
-            let asset = assetsFetchResult.firstObject
+            let asset = assetsFetchResult.lastObject
             return getImage(with: asset)
         }
     }

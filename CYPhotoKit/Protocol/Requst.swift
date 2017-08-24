@@ -35,11 +35,11 @@ public extension CYPhotosPickerable  {
 
     /// 清空相册选择器全部已经选过的图片
     func emptySelectedList() {
-        CYPhotosManager.defaultManager.emptySelectedList()
+        CYPhotosManager.default.emptySelectedList()
     }
 
     func removeSelectPhotos(forKey key : String) {
-        CYPhotosManager.defaultManager.removeSelectPhotos(forKey: key)
+        CYPhotosManager.default.removeSelectPhotos(forKey: key)
     }
     
 

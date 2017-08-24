@@ -26,7 +26,7 @@ public let maxSelectPhotoCount : Int = 9
 
 public let CYAppKeyWindow : UIWindow? = UIApplication.shared.keyWindow
 
-public var tintColor : UIColor         = UIColor.CYColor(0.0, green: 187.0, blue: 42.0)
+public var BaseTintColor : UIColor         = UIColor.CYColor(0.0, green: 187.0, blue: 42.0)
 
 /**
  自定义 LOG

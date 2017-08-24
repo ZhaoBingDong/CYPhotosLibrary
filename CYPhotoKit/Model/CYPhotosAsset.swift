@@ -9,62 +9,99 @@
 import UIKit
 import Photos
 
-public class CYPhotosAsset: NSObject {
-
-    public var asset : PHAsset = PHAsset()
-    public var thumbnail : UIImage = UIImage()
-    public var originalImg : UIImage = UIImage()
-    public var imageURL : URL?
-    public var originalImgLength : Double = 0.0
+public typealias CYPhotosAsset = PHAsset
+private var SelectKey : String = "isSelect"
+public extension CYPhotosAsset {
+    
+    public var isSelect : Bool {
+        set {
+            objc_setAssociatedObject(self, &SelectKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_ASSIGN)
+        }
+        get {
+            if  let select = objc_getAssociatedObject(self, &SelectKey) as? Bool {
+                return select
+            }
+            return false
+        }
+    }
+    public var originalImg : UIImage {
+        get {
+            let data = self.tuple.data
+            return UIImage(data: data) ?? UIImage()
+        }
+    }
+    
+    private var tuple : (data : Data , info : [AnyHashable : Any]?) {
+        var imageData       = Data()
+        var dict : [AnyHashable : Any]?
+        self.imageManager.requestImageData(for: self, options: self.requestOption) { (data, dataUTI, orientation, info) in
+            dict = info
+            if let da = data {
+                imageData = da
+            }
+        }
+        return (imageData,dict)
+    }
     public var imageData : Data? {
         get {
-            if CYPhotosManager.defaultManager.isFullMode {
+            if CYPhotosManager.default.isFullMode {
                 return UIImageJPEGRepresentation(self.originalImg,1.0)
             } else {
                 return UIImageJPEGRepresentation(self.thumbnail,1.0)
             }
         }
     }
-    public var isSelectedImage : Bool = false
-    public var localIdentifier : String? {
+    public var thumbnail : UIImage {
+        var thumbnail           = UIImage()
+        self.imageManager.requestImage(for: self, targetSize: CGSize.init(width: 250.0, height: 250.0), contentMode: .aspectFill, options: self.requestOption) { (image, info) in
+            thumbnail = image ?? UIImage()
+        }
+        return thumbnail
+    }
+    
+    public var imageURL : URL? {
         get {
-            return self.asset.localIdentifier
-        }
-    }
-    public  convenience init(photoAsset : PHAsset) {
-        self.init()
-        self.asset              = photoAsset
-
-        let imageManager        = PHImageManager.default()
-        let option              = PHImageRequestOptions()
-        option.isSynchronous    = true
-        option.resizeMode       = .fast
-        option.deliveryMode     = .highQualityFormat
-        imageManager.requestImage(for: self.asset, targetSize: CGSize.init(width: 250.0, height: 250.0), contentMode: .aspectFill, options: option) {[weak self] (image, info) in
-            self?.thumbnail = image ?? UIImage()
-        }
-        imageManager.requestImageData(for: self.asset, options: option) {[weak self] (imageData, dataUTI, orientation, info) in
-            self?.imageURL = info?["PHImageFileURLKey"] as? URL
-            if let data = imageData {
-
-                self?.originalImg = UIImage(data: data)!
-                guard let obj = (info?["PHImageFileDataKey"] as? NSObject) else {
-                    self?.originalImgLength = Double(data.count)
-                    return
-                }
-                guard !obj.isKind(of: NSData.self) else {
-                    self?.originalImgLength = Double((obj as! NSData).length)
-                    return
-                }
-                guard  let dataLength  = obj.value(forKey: "dataLength") as? Double else {
-                    self?.originalImgLength = Double(data.count)
-                    return
-                }
-                self?.originalImgLength = dataLength
+            if let info = self.tuple.info {
+                return info["PHImageFileURLKey"] as? URL
+            } else {
+                return nil
             }
-
         }
     }
+    
+    public var originalImgLength : Double  {
+        
+        let tuple           = self.tuple
+        let info            = tuple.info
+        let data            = tuple.data
+        
+        guard info          != nil else { return 0.0 }
+        
+        guard let obj = (info!["PHImageFileDataKey"] as? NSObject) else {
+            return Double(data.count)
+        }
+        guard !obj.isKind(of: NSData.self) else {
+           return Double((obj as! NSData).length)
+        }
+        guard  let dataLength  = obj.value(forKey: "dataLength") as? Double else {
+             return  Double(data.count)
+        }
+        
+        return dataLength
+    }
+
+    private  var requestOption : PHImageRequestOptions {
+        get {
+            let option              = PHImageRequestOptions()
+            option.isSynchronous    = true
+            option.resizeMode       = .fast
+            option.deliveryMode     = .highQualityFormat
+            return option
+        }
+    }
+    
+    private var  imageManager   : PHImageManager {
+        return PHImageManager.default()
+    }
+    
 }
-
-

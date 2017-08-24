@@ -131,11 +131,9 @@ extension ViewController : UICollectionViewDelegate , UICollectionViewDataSource
 
     func bkCollectionViewCellDidSelectDelegateButton(cell: CYCollectionViewCell) {
 
-
+        
         if  let indexPath  = collectionView.indexPath(for: cell) {
-
             let photo       = self.dataArray[indexPath.item];
-
             // 从图片管理器中移除已经选择过的图片
             removeSelectPhotos(forKey: (photo.asset?.localIdentifier)!)
 

@@ -17,9 +17,9 @@ enum CYPhotoAssetType : Int {
 class CYPhoto : NSObject {
     var image : UIImage?
     var asset : PHAsset?
-    var photosAsset : CYPhotosAsset? {
+    var photosAsset : PHAsset? {
         didSet {
-            self.asset = photosAsset?.asset
+            self.asset = photosAsset
         }
     }
     var type : CYPhotoAssetType = .add

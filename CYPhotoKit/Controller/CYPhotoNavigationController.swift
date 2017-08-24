@@ -38,7 +38,6 @@ public class CYPhotoNavigationController: UINavigationController {
         super.viewDidLoad()
         self.navigationBar.barTintColor         = UIColor.CYColor(34, green: 34, blue: 34)
         self.navigationBar.tintColor           = .white
-//        self.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
         self.navigationController?.interactivePopGestureRecognizer!.delegate    = self
     }
     override public func viewWillAppear(_ animated: Bool) {
@@ -74,7 +73,7 @@ public class CYPhotoNavigationController: UINavigationController {
     }
 
     deinit {
-        NSLog("self deaclloc")
+//        NSLog("self deaclloc")
     }
 
     public override var preferredStatusBarStyle: UIStatusBarStyle {

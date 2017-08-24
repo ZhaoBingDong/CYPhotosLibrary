@@ -54,7 +54,7 @@ public class CYAuthorizedFailureViewController: UIViewController {
 
         settingBtn                   = UIButton(type: .custom)
         settingBtn?.setTitle("前往设置", for: .normal)
-        settingBtn?.setTitleColor(tintColor, for: .normal)
+        settingBtn?.setTitleColor(BaseTintColor, for: .normal)
         settingBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 14.0)
         settingBtn?.addTarget(self, action: #selector(settingButtonClick(_:)), for: .touchUpInside)
         settingBtn?.frame            = CGRect(x: CYAppKeyWindow!.frame.midX+5.0, y: label.frame.maxY+5.0, width: 60.0, height: 25.0)

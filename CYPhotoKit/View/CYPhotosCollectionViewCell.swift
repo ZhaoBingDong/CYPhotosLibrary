@@ -15,20 +15,26 @@ class CYPhotosCollectionViewCell: UICollectionViewCell {
     public var selectButton  = UIButton(type: .custom)
     public var photosAsset : PHAsset? {
         didSet {
-            if let asset = self.photosAsset {
-                let option              = PHImageRequestOptions()
-                option.deliveryMode     = .highQualityFormat
-                option.isSynchronous    = false
-                option.resizeMode       = .fast
-                self.imageManager?.requestImage(for:asset, targetSize: CGSize(width:250.0, height:250.0), contentMode: .aspectFill, options: option) {[weak self] (result, _) in
-                    self?.performSelector(onMainThread: #selector(self?.setImage(_:)) , with: result, waitUntilDone: true)
-                }
+            
+            guard photosAsset != nil else {
+                self.imageView.image = CYResourceAssets.takePhotos
+                self.isSelectItem     = false
+                return
             }
+            
+            self.isSelectItem       = photosAsset!.isSelect
+            let option              = PHImageRequestOptions()
+            option.deliveryMode     = .highQualityFormat
+            option.resizeMode       = .fast
+            self.imageManager?.requestImage(for:photosAsset!, targetSize: CGSize(width:250.0, height:250.0), contentMode: .aspectFill, options: option) {[weak self] (result, _) in
+                self?.performSelector(onMainThread: #selector(self?.setImage(_:)) , with: result, waitUntilDone: true)
+            }
+            
         }
     }
     @objc private func setImage(_ image : UIImage?) {
         self.coverView.isHidden = !isSelectItem
-        self.imageView.image = image
+        self.imageView.image    = image
     }
     public var imageManager : PHCachingImageManager?
     public var isSelectItem : Bool = false 
