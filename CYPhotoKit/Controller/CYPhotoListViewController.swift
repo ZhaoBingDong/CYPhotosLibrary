@@ -14,7 +14,9 @@ import Photos
 public class CYPhotoListViewController: UIViewController {
 
     private var  needScrollToBottom  : Bool = true
-    private var maxCount : Int              = maxSelectPhotoCount
+    private var maxCount : Int              {
+        return (self.navigationController as! CYPhotoNavigationController).maxPickerImageCount
+    }
     public var isShowCamera : Bool          {
         return title == "相机胶卷"
     }

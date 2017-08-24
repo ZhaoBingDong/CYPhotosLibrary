@@ -14,7 +14,9 @@ public protocol CYPhotosPickerable : class  {
 
     /// 当前正在显示的控制器
     var currentViewController : UIViewController { get }
-
+    
+    /// 最多可以选择几张图片
+    var selectImageCount : Int { get }
     /// 完成选择相片后的方法
     ///
     /// - Parameter photos: 拿到用户选取图片的集合
@@ -23,12 +25,13 @@ public protocol CYPhotosPickerable : class  {
 
 // MARK: - CYPhotosPickerable
 public extension CYPhotosPickerable  {
-
+    
     /// 打开相册选择器
     func showImagePickerViewController() {
-        let nav = CYPhotoNavigationController.showPhotosViewController()
+        let nav                  = CYPhotoNavigationController.showPhotosViewController()
         self.currentViewController.present(nav, animated: true, completion: nil)
-        nav.completionBlock = {[weak self] (photos) in
+        nav.maxPickerImageCount  = selectImageCount
+        nav.completionBlock      = {[weak self] (photos) in
             self?.didFinishedSelectPhotos(photos)
         }
     }

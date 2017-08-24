@@ -53,15 +53,4 @@ public extension UIColor {
 
 }
 
-public extension String {
 
-    public func base64Encoding() -> String? {
-        let data = self.data(using: .utf8, allowLossyConversion: true)
-        if let base64String  = data?.base64EncodedString() {
-            return base64String
-        } else {
-            return nil
-        }
-    }
-
-}
