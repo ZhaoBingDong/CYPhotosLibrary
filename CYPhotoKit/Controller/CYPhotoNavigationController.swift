@@ -36,9 +36,9 @@ public class CYPhotoNavigationController: UINavigationController {
     }
     override public func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationBar.barTintColor         = UIColor.CYColor(34, green: 34, blue: 34)
-        self.navigationBar.tintColor            = .white
-        self.navigationBar.titleTextAttributes  = [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17.0),NSAttributedStringKey.foregroundColor : UIColor.white]
+        self.navigationBar.barTintColor             = UIColor.CYColor(34, green: 34, blue: 34)
+        self.navigationBar.tintColor                = .white
+        self.navigationBar.titleTextAttributes      = [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17.0),NSAttributedStringKey.foregroundColor : UIColor.white]
         let attributeds                             = [NSAttributedStringKey.foregroundColor : UIColor.white,NSAttributedStringKey.font : UIFont.systemFont(ofSize: 15.0)]
 
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [CYPhotoNavigationController.self]).setTitleTextAttributes(attributeds, for: .normal)

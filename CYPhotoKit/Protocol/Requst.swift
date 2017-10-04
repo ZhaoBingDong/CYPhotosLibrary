@@ -21,6 +21,8 @@ public protocol CYPhotosPickerable : class  {
     ///
     /// - Parameter photos: 拿到用户选取图片的集合
     func didFinishedSelectPhotos(_ photos : [CYPhotosAsset])
+    
+    var isFullMode : Bool { get }
 }
 
 // MARK: - CYPhotosPickerable
@@ -34,6 +36,7 @@ public extension CYPhotosPickerable  {
         nav.completionBlock      = {[weak self] (photos) in
             self?.didFinishedSelectPhotos(photos)
         }
+        CYPhotosManager.default.isFullMode = isFullMode
     }
 
     /// 清空相册选择器全部已经选过的图片
@@ -44,6 +47,5 @@ public extension CYPhotosPickerable  {
     func removeSelectPhotos(forKey key : String) {
         CYPhotosManager.default.removeSelectPhotos(forKey: key)
     }
-    
 
 }

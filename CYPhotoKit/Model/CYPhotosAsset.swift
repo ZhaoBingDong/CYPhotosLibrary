@@ -45,7 +45,7 @@ public extension CYPhotosAsset {
     public var imageData : Data? {
         get {
             if CYPhotosManager.default.isFullMode {
-                return UIImageJPEGRepresentation(self.originalImg,1.0)
+                return UIImageJPEGRepresentation(self.originalImg,0.5)
             } else {
                 return UIImageJPEGRepresentation(self.thumbnail,1.0)
             }
