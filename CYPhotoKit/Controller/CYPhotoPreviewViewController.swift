@@ -88,7 +88,7 @@ public class CYPhotoPreviewViewController: UIViewController {
         checkBoxButton?.setImage(CYResourceAssets.checkmarkImage, for: .selected)
         checkBoxButton?.setImage(CYResourceAssets.checkmarkNormal, for: .normal)
         checkBoxButton?.addTarget(self, action: #selector(checkBoxClick(_:)), for: .touchUpInside)
-        checkBoxButton?.frame                      = CGRect(x:0.0, y:0.0, width:26, height:26);
+        checkBoxButton?.frame                 = CGRect(x:0.0, y:0.0, width:26, height:26);
         v.addSubview(checkBoxButton!)
 
         setCheckBoxButtonState(pageIndex)

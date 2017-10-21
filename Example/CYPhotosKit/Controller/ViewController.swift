@@ -52,9 +52,16 @@ class ViewController: UIViewController  {
 //MARK:CYPhotosPickerable  是遵守者对象具有获取并使用系统相册图片的能力
 
 extension ViewController : CYPhotosPickerable {
-
+    
+    var selectImageCount: Int {
+        return 1
+    }
+    
+    var isFullMode: Bool {
+       return true
+    }
+    
     var currentViewController: UIViewController { return self }
-
     func didFinishedSelectPhotos(_ photos: [CYPhotosAsset]) {
 
         var array = [CYPhoto]()

@@ -71,7 +71,7 @@ public class CYPhotoListViewController: UIViewController {
     }()
     private lazy var fullModeButton : UIButton = {
         let button               = UIButton(type: .custom)
-        button.frame             = CGRect.init(x: self.previewButton.frame.maxX + 5.0, y: 0.0, width: 65.0, height: 44.0)
+        button.frame             = CGRect(x: self.previewButton.frame.maxX + 5.0, y: 0.0, width: 65.0, height: 44.0)
         button.imageEdgeInsets   = UIEdgeInsetsMake(0, -10, 0, 0)
         button.titleLabel?.font  = UIFont.systemFont(ofSize: 15.0)
         button.setImage(CYResourceAssets.fullImageNormal, for: .normal)
@@ -84,7 +84,7 @@ public class CYPhotoListViewController: UIViewController {
     }()
     //  所有原图相片的 size
     private lazy var  fullImageSizeLabel : UILabel = {
-        let label                                  = UILabel()
+        let label                                   = UILabel()
         let labelX                                  = fullModeButton.frame.maxX + 1.0
         label.frame                                 = CGRect(x: labelX, y: 12.0 , width: 200.0, height: 20.0)
         label.font                                  = UIFont.systemFont(ofSize: 15.0)

@@ -9,12 +9,13 @@
 import Foundation
 import UIKit
 
-public let CYScreenWidth : CGFloat = UIScreen.main.bounds.size.width
+public let CYScreenWidth : CGFloat  = UIScreen.main.bounds.size.width
 public let CYScreenHeight : CGFloat = UIScreen.main.bounds.size.height
 
 public func imageNameInBundle(name : String) -> String {
     return "ImageBundle.bundle/\(name)"
 }
+
 public func bundleWithClass(cls : AnyClass) -> Bundle {
    return Bundle(for:cls)
 }
@@ -22,9 +23,9 @@ public func bundleWithClass(cls : AnyClass) -> Bundle {
 /**
  *  最大选取照片的数量
  */
-public let maxSelectPhotoCount : Int = 9
+public let maxSelectPhotoCount : Int       = 9
 
-public let CYAppKeyWindow : UIWindow? = UIApplication.shared.keyWindow
+public let CYAppKeyWindow : UIWindow?      = UIApplication.shared.keyWindow
 
 public var BaseTintColor : UIColor         = UIColor.CYColor(0.0, green: 187.0, blue: 42.0)
 
@@ -36,7 +37,6 @@ public func NSLog<T>(_ msg: T, fileName: String = #file, methodName: String = #f
         print("\n\(methodName) \n \(msg)\n")
     #endif
 }
-
 
 public extension UIColor {
 

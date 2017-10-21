@@ -22,7 +22,6 @@ open class CYResourceAssets: NSObject {
     open class var locked : UIImage { return CYResourceAssets.bundledImage(named: "lock") }
     open class var takePhotos : UIImage { return CYResourceAssets.bundledImage(named: "takePicture") }
 
-
     internal class func bundledImage(named name: String) -> UIImage {
         let imageName = imageNameInBundle(name: name)
         let bundle = bundleWithClass(cls: CYResourceAssets.self)
